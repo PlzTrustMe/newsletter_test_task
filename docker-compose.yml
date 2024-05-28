@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  api:
+    stop_signal: SIGINT
+    build:
+      context: ./backend
+      dockerfile: api.Dockerfile
+    working_dir: "/usr/src/app/api"
+    volumes:
+      - ./backend:/usr/src/app/api
+    command:
+      [ "uvicorn",
+        "main:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8000",
+        "--reload"
+      ]
+    restart: always
+    ports:
+      - "3779:8000"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
