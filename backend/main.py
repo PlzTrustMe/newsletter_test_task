@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from presentation.api.endpoints.setup import setup_endpoints
+from src.presentation.api.endpoints.setup import setup_endpoints
 
 app = FastAPI(title="Newsletter", version="0.0.1", prefix="/api")
 
