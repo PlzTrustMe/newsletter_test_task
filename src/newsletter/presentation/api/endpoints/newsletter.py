@@ -24,7 +24,7 @@ newsletter_router = APIRouter(prefix="/newsletter", tags=["newsletter"])
 
 @newsletter_router.get("/")
 async def get_newsletters(
-        tags: Annotated[list[str], Query()] = None,
+        tags: Annotated[list[str], Query(default_factory=list)],
         action: GetNewsletters = Depends(get_newsletters_interactor),
 ) -> NewslettersResultDTO:
     response = await action(filters=GetNewslettersFilters(
