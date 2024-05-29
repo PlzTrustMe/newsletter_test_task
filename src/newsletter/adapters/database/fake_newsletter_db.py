@@ -59,7 +59,6 @@ class FakeNewsletterDB(NewslettersReader, NewsletterReader):
         ]
 
         if filters.tags:
-            print(filters.tags)
             newsletters = [
                 newsletter for newsletter in newsletters
                 if any(tag in newsletter.tags for tag in filters.tags)
