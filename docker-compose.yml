@@ -13,7 +13,13 @@ services:
       - ./src:/usr/src/app/api
     networks:
       - backend
-    restart: always
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -fsSL http://localhost:8000/healthcheck/" ]
+      interval: 10s
+      timeout: 60s
+      retries: 5
+      start_period: 10s
 networks:
   backend:
     driver: bridge

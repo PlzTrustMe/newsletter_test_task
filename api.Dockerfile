@@ -4,7 +4,8 @@ ENV WEBHOOK_APP_NAME=api
 WORKDIR /usr/src/app/$WEBHOOK_APP_NAME
 
 RUN apt update -y && \
-    apt install -y python3-dev \
+    apt install -y python3-dev && \
+    apt-get install -y curl \
     gcc \
     musl-dev
 
