@@ -1,7 +1,7 @@
 from typing import Optional
 
 from newsletter.application.common.newsletter_gateway import NewslettersReader, \
-    NewsletterReader
+    NewsletterReader, GetNewslettersFilters
 from newsletter.domain.models.newsletter import Newsletter
 
 newsletter_post_data: list[dict] = [
@@ -44,8 +44,11 @@ newsletter_post_data: list[dict] = [
 
 
 class FakeNewsletterDB(NewslettersReader, NewsletterReader):
-    async def get_newsletters(self) -> list[Newsletter]:
-        return [
+    async def get_newsletters(
+            self,
+            filters: GetNewslettersFilters
+    ) -> list[Newsletter]:
+        newsletters = [
             Newsletter(
                 id=item.get("id"),
                 title=item.get("title"),
@@ -54,6 +57,15 @@ class FakeNewsletterDB(NewslettersReader, NewsletterReader):
                 content=item.get("content"),
             ) for item in newsletter_post_data
         ]
+
+        if filters.tags:
+            print(filters.tags)
+            newsletters = [
+                newsletter for newsletter in newsletters
+                if any(tag in newsletter.tags for tag in filters.tags)
+            ]
+
+        return newsletters
 
     async def get_newsletter_with_id(
             self,

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from .common.interactor import Interactor
-from .common.newsletter_gateway import NewslettersReader
+from .common.newsletter_gateway import NewslettersReader, GetNewslettersFilters
 from ..domain.models.newsletter import Newsletter
 
 
@@ -17,7 +17,12 @@ class GetNewsletters(Interactor[None, NewslettersResultDTO]):
     ):
         self.newsletter_db_gateway = newsletter_db_gateway
 
-    async def __call__(self, data=None) -> NewslettersResultDTO:
-        newsletters = await self.newsletter_db_gateway.get_newsletters()
+    async def __call__(
+            self,
+            filters: GetNewslettersFilters
+    ) -> NewslettersResultDTO:
+        newsletters = await self.newsletter_db_gateway.get_newsletters(
+            filters=filters
+        )
 
         return NewslettersResultDTO(newsletters=newsletters)

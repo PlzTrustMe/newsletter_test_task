@@ -1,13 +1,13 @@
-from typing import Type
+from typing import Type, Optional, List, Annotated
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from starlette import status
 
 from newsletter.adapters.database.fake_newsletter_db import FakeNewsletterDB
 from newsletter.application.common.exceptions import NewsletterIdNotExistError
 from newsletter.application.common.newsletter_gateway import (
     NewslettersReader,
-    NewsletterReader
+    NewsletterReader, GetNewslettersFilters
 )
 from newsletter.application.get_newsletter import GetNewsletter
 from newsletter.application.get_newsletter import NewsletterDTO
@@ -34,9 +34,12 @@ def get_newsletter_interactor(
 
 @newsletter_router.get("/")
 async def get_newsletters(
+        tags: Annotated[list, Query()] = list,
         action: GetNewsletters = Depends(get_newsletters_interactor),
 ) -> NewslettersResultDTO:
-    response = await action()
+    response = await action(filters=GetNewslettersFilters(
+        tags=tags,
+    ))
 
     return response
 
