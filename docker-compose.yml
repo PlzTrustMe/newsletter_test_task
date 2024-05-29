@@ -1,34 +1,19 @@
-version: "3"
+version: '3.9'
 
 services:
-  api:
+  backend:
     stop_signal: SIGINT
     build:
-      context: ./backend
       dockerfile: api.Dockerfile
     working_dir: "/usr/src/app/api"
-    volumes:
-      - ./backend:/usr/src/app/api
-    command:
-      [ "uvicorn",
-        "main:app",
-        "--host",
-        "0.0.0.0",
-        "--port",
-        "8000",
-        "--reload"
-      ]
-    restart: always
     ports:
       - "8000:8000"
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -fsSL http://localhost:8000/healthcheck/"]
-      interval: 10s
-      timeout: 60s
-      retries: 5
-      start_period: 10s
+    command: "uvicorn --factory newsletter.main:create_app --reload --host 0.0.0.0 --port 8000"
+    volumes:
+      - ./src:/usr/src/app/api
+    networks:
+      - backend
+    restart: always
+networks:
+  backend:
+    driver: bridge

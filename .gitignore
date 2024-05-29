@@ -164,5 +164,5 @@ cython_debug/
 /.idea/newsletter_test_task.iml
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/inspectionProfiles/Project_Default.xml
-/backend/requirements.txt
+/src/requirements.txt
 /.idea/vcs.xml
