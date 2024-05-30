@@ -1,6 +1,14 @@
-version: '3.9'
-
 services:
+  frontend:
+    build: .
+    working_dir: /home/node/app/front
+    ports:
+      - "4200:4200"
+    volumes:
+       - ./front:/home/node/app/front
+       - node_modules_volume:/home/node/app/node_modules
+
+
   backend:
     stop_signal: SIGINT
     build:
@@ -20,6 +28,10 @@ services:
       timeout: 60s
       retries: 5
       start_period: 10s
+
 networks:
   backend:
     driver: bridge
+
+volumes:
+  node_modules_volume:
